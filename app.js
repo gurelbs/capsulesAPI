@@ -22,7 +22,6 @@ const createDetails = () => {
     let table = $('table')
     let tr = $('tr')
     let localdata = JSON.parse(localStorage.getItem('data'))
-    console.log(Object.keys(localdata[0]));
     Object.keys(localdata[0]).forEach(key => {
         let th = $('th')
         th.textContent = key
@@ -31,12 +30,20 @@ const createDetails = () => {
     })
     localdata.forEach((person) => {
         let tr1 = $('tr')
+        let deleteBtn = $('i')
+        let updateBtn = $('i')
+        deleteBtn.classList.add("fas", "fa-trash-alt")
+        updateBtn.classList.add("fas", "fa-user-edit")
         Object.values(person).forEach(key => {
             let td = $('td')
             td.textContent = key
             tr1.appendChild(td)
-            table.appendChild(tr1)
         })
+        let div = $('div')
+        div.appendChild(deleteBtn)
+        div.appendChild(updateBtn)
+        tr1.appendChild(div)
+        table.appendChild(tr1)
     });
     document.body.appendChild(table)
 }
