@@ -6,8 +6,9 @@ let table = _('.table')
 let search = _('.search')
 let inputSearch = _('.inputSearch')
 let searchBy = _('#search-by')
-    // localStorage.setItem('data', JSON.stringify([]))
-    // let data = JSON.parse(localStorage.getItem('data'))
+
+// localStorage.setItem('data', JSON.stringify([]))
+// let data = JSON.parse(localStorage.getItem('data'))
 let data = []
 const saveToLocalStrorge = () => localStorage.setItem('data', JSON.stringify(data))
 fetch(api)
@@ -43,6 +44,7 @@ const createDetails = () => {
         table.appendChild(tr)
     })
     localdata.forEach((person) => {
+
         let tr1 = $('tr')
         let deleteBtn = $('i')
         let updateBtn = $('i')
@@ -51,19 +53,33 @@ const createDetails = () => {
         Object.values(person).forEach(key => {
             let td = $('td')
             let span = $('span')
+
             span.textContent = key
             td.appendChild(span)
             tr1.appendChild(td)
         })
         let div = $('div')
+        div.classList.add('btns')
         div.appendChild(deleteBtn)
         div.appendChild(updateBtn)
         tr1.appendChild(div)
         table.appendChild(tr1)
     });
+
     container.appendChild(table)
 }
+const addDataAttrToCity = () => {
+    let len = container.lastElementChild.childNodes.length
+    let trData = [...container.lastElementChild.childNodes].slice(1, len)
+    trData.forEach(tr => {
+        tr.childNodes[5].setAttribute('data-city', tr.childNodes[5].textContent)
+        tr.childNodes[5].classList.add('city')
+    })
+}
+
 createDetails()
+addDataAttrToCity()
+
 
 const handleEditBtn = e => {
     let el = e.target.parentElement.parentElement
@@ -125,94 +141,126 @@ let msgParag = $('p')
 msgParag.classList.add('msg-paragraph')
 inputSearch.insertAdjacentElement('beforebegin', msgParag)
 const handleSearchInput = e => {
-    let val = e.target.value
-    let len = container.lastElementChild.childNodes.length
-    let trData = [...container.lastElementChild.childNodes].slice(1, len)
-    let input = inputSearch.value.trim()
-    if (input.length > 0 && searchBy.value !== 'choose filter') {
-        if (searchBy.value === 'id' || searchBy.value === 'capsule' || searchBy.value === 'age') {
-            input = parseInt(input)
-                // most bt integer num between data length
-            if (typeof input !== 'number' || isNaN(input)) {
-                msgParag.textContent = 'type some number...'
-            } else {
-                if (searchBy.value === 'id') {
-                    msgParag.textContent = ''
-                    if (input > 31 || input < 0) {
-                        msgParag.textContent = 'id number should be between 0 to 31'
-                    } else {
-                        trData.forEach(tr => {
-                            let id = parseInt(tr.firstElementChild.firstElementChild.textContent)
-                            if (!id.toString().includes(input.toString())) {
-                                tr.classList.add('unvisable')
-                            }
-                        })
-                    }
-                }
-                if (searchBy.value === 'capsule') {
-                    if (input > 7 || input < 1) {
-                        msgParag.textContent = 'capsule number should be between 1 to 7'
-                    } else {
+        let len = container.lastElementChild.childNodes.length
+        let trData = [...container.lastElementChild.childNodes].slice(1, len)
+        let input = inputSearch.value.trim()
+        if (input.length > 0 && searchBy.value !== 'choose filter') {
+            if (searchBy.value === 'id' || searchBy.value === 'capsule' || searchBy.value === 'age') {
+                input = parseInt(input)
+                    // most bt integer num between data length
+                if (typeof input !== 'number' || isNaN(input)) {
+                    msgParag.textContent = 'type some number...'
+                } else {
+                    if (searchBy.value === 'id') {
                         msgParag.textContent = ''
-                        trData.forEach(tr => {
-                            let capsule = parseInt(tr.childNodes[3].textContent)
-                            if (!capsule.toString().includes(input.toString())) {
-                                tr.classList.add('unvisable')
-                            }
-                        })
-                    }
-                }
-                if (searchBy.value === 'age') {
-                    if (input < 1 || input > 100) {
-                        msgParag.textContent = 'all bootcamper age is between 1 to 100'
-                    } else {
-                        msgParag.textContent = ''
-                        trData.forEach(tr => {
-                            let age = parseInt(tr.childNodes[4].textContent)
-                            if (!age.toString().includes(input.toString())) {
-                                tr.classList.add('unvisable')
-                            }
-                        })
-                    }
-                }
-            }
-        } else if (
-            searchBy.value === 'firstName' ||
-            searchBy.value === 'lastName' ||
-            searchBy.value === 'city' ||
-            searchBy.value === 'gender' ||
-            searchBy.value === 'hobby'
-        ) {
-            input = input.toString().toLowerCase()
-            if (input.length == 0) {
-                msgParag.textContent = 'type some words...';
-            } else {
-                msgParag.textContent = '';
-                trData.forEach(tr => {
-                    const checkData = (x, y, i) => {
-                        if (x === y) {
-                            if (!tr.childNodes[i].firstElementChild.innerHTML.toLowerCase().includes(input)) {
-                                tr.classList.add('unvisable')
-                            }
+                        if (input > 31 || input < 0) {
+                            msgParag.textContent = 'id number should be between 0 to 31'
+                        } else {
+                            trData.forEach(tr => {
+                                let id = parseInt(tr.firstElementChild.firstElementChild.textContent)
+                                if (!id.toString().includes(input.toString())) {
+                                    tr.classList.add('unvisable')
+                                }
+                            })
                         }
                     }
-                    checkData(searchBy.value, 'firstName', 1)
-                    checkData(searchBy.value, 'lastName', 2)
-                    checkData(searchBy.value, 'city', 5)
-                    checkData(searchBy.value, 'gender', 6)
-                    checkData(searchBy.value, 'hobby', 7)
-                })
+                    if (searchBy.value === 'capsule') {
+                        if (input > 7 || input < 1) {
+                            msgParag.textContent = 'capsule number should be between 1 to 7'
+                        } else {
+                            msgParag.textContent = ''
+                            trData.forEach(tr => {
+                                let capsule = parseInt(tr.childNodes[3].textContent)
+                                if (!capsule.toString().includes(input.toString())) {
+                                    tr.classList.add('unvisable')
+                                }
+                            })
+                        }
+                    }
+                    if (searchBy.value === 'age') {
+                        if (input < 1 || input > 100) {
+                            msgParag.textContent = 'all bootcamper age is between 1 to 100'
+                        } else {
+                            msgParag.textContent = ''
+                            trData.forEach(tr => {
+                                let age = parseInt(tr.childNodes[4].textContent)
+                                if (!age.toString().includes(input.toString())) {
+                                    tr.classList.add('unvisable')
+                                }
+                            })
+                        }
+                    }
+                }
+            } else if (
+                searchBy.value === 'firstName' ||
+                searchBy.value === 'lastName' ||
+                searchBy.value === 'city' ||
+                searchBy.value === 'gender' ||
+                searchBy.value === 'hobby'
+            ) {
+                input = input.toString().toLowerCase()
+                if (input.length == 0) {
+                    msgParag.textContent = 'type some words...';
+                } else {
+                    msgParag.textContent = '';
+                    trData.forEach(tr => {
+                        const checkData = (x, y, i) => {
+                            if (x === y) {
+                                if (!tr.childNodes[i].firstElementChild.innerHTML.toLowerCase().includes(input)) {
+                                    tr.classList.add('unvisable')
+                                }
+                            }
+                        }
+                        checkData(searchBy.value, 'firstName', 1)
+                        checkData(searchBy.value, 'lastName', 2)
+                        checkData(searchBy.value, 'city', 5)
+                        checkData(searchBy.value, 'gender', 6)
+                        checkData(searchBy.value, 'hobby', 7)
+                    })
+                }
             }
         }
+        if ((e.key === 'Backspace' || input.length < 1)) {
+            trData.forEach(tr => {
+                tr.classList.remove('unvisable')
+            })
+        }
     }
-    if ((e.key === 'Backspace' || input.length < 1)) {
-        trData.forEach(tr => {
-            tr.classList.remove('unvisable')
-        })
-    }
-}
+    // add classlist to city
+
 search.addEventListener('keyup', e => handleSearchInput(e))
 search.addEventListener('click', handleSearchInput)
+
+
+const weatherCityHover = e => {
+    let val = e.target.textContent
+    val = val.toLowerCase().split(' ').join('-')
+    let apiKey = `880e6c92a48f9475528cfdf79d5d4f00`
+    let api = `http://api.openweathermap.org/data/2.5/weather?q=${val},israel&appid=${apiKey}&units=metric`
+    fetch(api)
+        .then(res => res.json())
+        .then(data => {
+            if (data.main.temp) {
+                let div = $('div')
+                div.classList.add('city-active')
+                e.target.appendChild(div)
+                console.log(data.main.temp);
+                if (e.target.classList.contains('city')) {
+                    div.textContent = data.main.temp
+                }
+            }
+        })
+        .catch(error => console.error(error))
+}
+
+const handleWeatherCityHover = () => {
+    let dataCity = document.querySelectorAll('[data-city]')
+    dataCity.forEach(city => {
+        city.addEventListener('mouseover', weatherCityHover)
+    })
+}
+handleWeatherCityHover()
+
 container.addEventListener('click', e => {
     e.target.classList.contains('fa-user-edit') ?
         handleEditBtn(e) :

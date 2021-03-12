@@ -81,6 +81,32 @@
         display: none;
     }
     
+    .city {
+        background-color: #333;
+    }
+    
+    .city-active {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        color: red;
+        background-color: black;
+        visibility: hidden;
+    }
+    
+    .city-active:hover {
+        visibility: visible;
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        color: red;
+        background-color: black;
+    }
+    
     table {
         border-collapse: collapse;
         margin: 1vw auto;
@@ -122,6 +148,7 @@
         white-space: nowrap;
         text-overflow: ellipsis;
         outline: 0;
+        position: relative;
     }
     
     table td:focus {
@@ -136,7 +163,7 @@
         width: 200%;
     }
     
-    table tr div {
+    table tr .btns {
         position: absolute;
         display: flex;
         place-items: center;
