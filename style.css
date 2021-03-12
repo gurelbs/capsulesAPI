@@ -2,6 +2,7 @@
         padding: 0;
         margin: 0;
         box-sizing: border-box;
+        scroll-behavior: smooth;
     }
     
     body {
@@ -17,10 +18,69 @@
         place-items: center;
     }
     
+    .container {
+        width: 80%;
+    }
+    
+    .search {
+        width: 100%;
+        justify-content: center;
+        display: flex;
+        position: relative;
+        margin: 2vw auto;
+    }
+    
+    .search input {
+        outline: 0;
+        border: 0;
+        border-bottom: 1px solid skyblue;
+        background-color: transparent;
+        font-size: calc(.5vw + .8rem);
+        color: #eee;
+        padding: 0 1vw 0 0;
+    }
+    
+    .search input[placeholder] {
+        text-transform: capitalize;
+    }
+    
+    .search .search-by {
+        position: relative;
+    }
+    
+    .search .search-by select {
+        padding: 0vw 1.5vw;
+        position: relative;
+        height: 100%;
+        right: 0%;
+        background-color: transparent;
+        color: white;
+        text-transform: uppercase;
+        font-size: calc(.5vw + .8rem);
+        margin: 0 auto;
+        outline: 0;
+        border: 0;
+        border-bottom: 1px solid skyblue;
+    }
+    
+    .search .search-by option {
+        font-size: calc(.5vw + 1rem);
+        color: rgb(0, 0, 0);
+        margin: 0 auto;
+    }
+    
+    .search .search-by select:hover {
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+    
+    .unvisable {
+        display: none;
+    }
+    
     table {
         border-collapse: collapse;
-        margin: 3vw auto;
-        width: 70%;
+        margin: 1vw auto;
+        width: 100%;
         table-layout: auto;
     }
     
@@ -31,22 +91,37 @@
         color: #eee;
         width: 100%;
         text-align: left;
+        font-size: calc(.8vw + .4rem);
     }
     
-    table tr:nth-child(even) {
-        background-color: rgba(245, 245, 220, 0.2);
-        color: #fff;
+    table th:first-child {
+        border-radius: 1vw 0 0;
+    }
+    
+    table th:last-child {
+        border-radius: 0 1vw 0 0;
+    }
+    
+    table tr {
+        display: flex;
+        position: relative;
+        width: 100%;
     }
     
     table td {
         width: 100%;
         height: 100%;
         display: inline-block;
-        padding: 1vw 2vw 1vw .5vw;
+        padding: 1vw 0;
         font-size: calc(.8vw + .4rem);
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+        outline: 0;
+    }
+    
+    table td:focus {
+        background-color: rgba(29, 153, 202, 0.37);
     }
     
     table td:nth-child(8n) {
@@ -55,12 +130,6 @@
     
     table th:nth-child(8n) {
         width: 200%;
-    }
-    
-    table tr {
-        display: flex;
-        position: relative;
-        width: 100%;
     }
     
     table tr div {
@@ -96,4 +165,18 @@
     table tr div .fa-trash-alt:hover {
         cursor: pointer;
         color: rgb(196, 52, 52)
+    }
+    
+    table tr div .fa-times-circle:hover {
+        cursor: pointer;
+        color: rgb(121, 134, 211)
+    }
+    
+    table tr div .fa-check:hover {
+        cursor: pointer;
+        color: rgb(35, 207, 35)
+    }
+    
+    table tr:hover {
+        background-color: rgba(42, 41, 41, 0.5);
     }
