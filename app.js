@@ -121,28 +121,94 @@ const saveDataWithChange = e => {
         saveToLocalStrorge()
     });
 }
+let msgParag = $('p')
+msgParag.classList.add('msg-paragraph')
+inputSearch.insertAdjacentElement('beforebegin', msgParag)
 const handleSearchInput = e => {
-    let val = e.target.value.toLowerCase()
-    if (val.length > 0 && searchBy.value !== 'choose filter') {
-        let len = container.lastElementChild.childNodes.length
-        let trData = [...container.lastElementChild.childNodes].slice(1, len)
-        let res = []
-        console.log(inputSearch.value.trim());
-        console.log(student[searchBy.value].toLowerCase());
-        data.forEach((student) => {
-            let checkStr = student[searchBy.value].toLowerCase().includes(val)
-                //     trData.forEach((tr, i) => {
-                //         if (checkStr) {
-                //             if (!tr.firstElementChild.firstElementChild.textContent == student.id) {
-                //                 tr.remove()
-                //             }
-                //         }
-                //     })
-
-        })
+    let val = e.target.value
+    let len = container.lastElementChild.childNodes.length
+    let trData = [...container.lastElementChild.childNodes].slice(1, len)
+    let input = inputSearch.value.trim()
+    if (input.length > 0 && searchBy.value !== 'choose filter') {
+        if (searchBy.value === 'id' || searchBy.value === 'capsule' || searchBy.value === 'age') {
+            input = parseInt(input)
+                // most bt integer num between data length
+            if (typeof input !== 'number' || isNaN(input)) {
+                msgParag.textContent = 'type some number...'
+            } else {
+                if (searchBy.value === 'id') {
+                    msgParag.textContent = ''
+                    if (input > 31 || input < 0) {
+                        msgParag.textContent = 'id number should be between 0 to 31'
+                    } else {
+                        trData.forEach(tr => {
+                            let id = parseInt(tr.firstElementChild.firstElementChild.textContent)
+                            if (!id.toString().includes(input.toString())) {
+                                tr.classList.add('unvisable')
+                            }
+                        })
+                    }
+                }
+                if (searchBy.value === 'capsule') {
+                    if (input > 7 || input < 1) {
+                        msgParag.textContent = 'capsule number should be between 1 to 7'
+                    } else {
+                        msgParag.textContent = ''
+                        trData.forEach(tr => {
+                            let capsule = parseInt(tr.childNodes[3].textContent)
+                            if (!capsule.toString().includes(input.toString())) {
+                                tr.classList.add('unvisable')
+                            }
+                        })
+                    }
+                }
+                if (searchBy.value === 'age') {
+                    if (input < 1 || input > 100) {
+                        msgParag.textContent = 'all bootcamper age is between 1 to 100'
+                    } else {
+                        msgParag.textContent = ''
+                        trData.forEach(tr => {
+                            let age = parseInt(tr.childNodes[4].textContent)
+                            if (!age.toString().includes(input.toString())) {
+                                tr.classList.add('unvisable')
+                            }
+                        })
+                    }
+                }
+            }
+        } else if (
+            searchBy.value === 'firstName' ||
+            searchBy.value === 'lastName' ||
+            searchBy.value === 'city' ||
+            searchBy.value === 'gender' ||
+            searchBy.value === 'hobby'
+        ) {
+            input = input.toString().toLowerCase()
+            if (input.length == 0) {
+                msgParag.textContent = 'type some words...';
+            } else {
+                msgParag.textContent = '';
+                trData.forEach(tr => {
+                    const checkData = (x, y, i) => {
+                        if (x === y) {
+                            if (!tr.childNodes[i].firstElementChild.innerHTML.toLowerCase().includes(input)) {
+                                tr.classList.add('unvisable')
+                            }
+                        }
+                    }
+                    checkData(searchBy.value, 'firstName', 1)
+                    checkData(searchBy.value, 'lastName', 2)
+                    checkData(searchBy.value, 'city', 5)
+                    checkData(searchBy.value, 'gender', 6)
+                    checkData(searchBy.value, 'hobby', 7)
+                })
+            }
+        }
     }
-    if ((e.key === 'Backspace') && val.length > 0) {
-        handleSearchInput(e)
+    if ((e.key === 'Backspace' || input.length < 1)) {
+        trData.forEach(tr => {
+            tr.classList.remove('unvisable')
+        })
     }
 }
 search.addEventListener('keyup', e => handleSearchInput(e))
