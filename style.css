@@ -18,11 +18,16 @@
         width: 80%;
         position: relative;
         margin: 0 auto;
+        display: flex;
+        flex-direction: column;
     }
     
     .msg-paragraph {
+        position: relative;
         color: red;
         padding: 0 2vw;
+        position: relative;
+        text-align: center;
     }
     
     .search {
@@ -53,7 +58,6 @@
     }
     
     .search .search-by select {
-        padding: 0vw 1.5vw;
         position: relative;
         height: 100%;
         right: 0%;
@@ -81,47 +85,70 @@
         display: none;
     }
     
-    .city {
-        background-color: #333;
-    }
-    
     .city-active {
         position: absolute;
         top: 0;
-        left: 0;
+        right: 0;
+        bottom: 0;
         height: 100%;
         width: 100%;
-        color: red;
-        background-color: black;
-        visibility: hidden;
+        color: transparent;
+        background-color: transparent;
     }
     
     .city-active:hover {
-        visibility: visible;
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 100%;
-        width: 100%;
         color: red;
-        background-color: black;
+        background-color: rgba(0, 0, 0, 0.7);
+        transition: .15s ease-in-out;
+        cursor: pointer;
+        position: absolute;
+        padding: .2vw .2vw 0 0;
+        text-align: right;
+        font-size: (.4rem + .5vw);
+        white-space: pre-wrap;
+        text-overflow: ellipsis;
     }
     
     table {
         border-collapse: collapse;
         margin: 1vw auto;
-        width: 100%;
+        width: 80%;
         table-layout: auto;
     }
     
     table th {
         background: #66969667;
-        padding: 1vw 2vw 1vw .5vw;
         text-transform: capitalize;
         color: #eee;
         width: 100%;
-        text-align: left;
+        text-align: center;
         font-size: calc(.8vw + .4rem);
+        position: relative;
+        display: flex;
+        place-items: center;
+        justify-content: center;
+        padding: 1vw 2vw;
+    }
+    
+    .sort-arrow {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        margin: auto;
+        height: 100%;
+        font-size: calc(.8vw + .4rem);
+        float: right;
+    }
+    
+    .sort-arrow i {
+        font-size: calc(.5vw + .4rem);
+        color: #333;
+    }
+    
+    .sort-arrow i:hover {
+        font-size: calc(.5vw + .4rem);
+        color: rgb(178, 199, 108);
+        cursor: pointer;
     }
     
     table th:first-child {
@@ -154,14 +181,13 @@
     table td:focus {
         background-color: rgba(29, 153, 202, 0.37);
     }
-    
-    table td:nth-child(8n) {
+    /* table td:nth-child(8n) {
         width: 200%;
     }
     
     table th:nth-child(8n) {
         width: 200%;
-    }
+    } */
     
     table tr .btns {
         position: absolute;
@@ -210,4 +236,10 @@
     
     table tr:hover {
         background-color: rgba(42, 41, 41, 0.5);
+        cursor: pointer;
+    }
+    
+    table tr:nth-child(1):hover {
+        background-color: transparent;
+        cursor: auto;
     }

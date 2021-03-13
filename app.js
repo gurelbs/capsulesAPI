@@ -2,7 +2,7 @@ const api = `https://apple-seeds.herokuapp.com/api/users/`
 let $ = x => document.createElement(x)
 let _ = x => document.querySelector(x)
 let container = _('.container')
-let table = _('.table')
+let table = _('table')
 let search = _('.search')
 let inputSearch = _('.inputSearch')
 let searchBy = _('#search-by')
@@ -35,16 +35,24 @@ const createDetails = () => {
     let localdata = JSON.parse(localStorage.getItem('data'))
     Object.keys(localdata[0]).forEach(key => {
         let th = $('th')
+        let sortArrow = $('div')
+        sortArrow.classList.add('sort-arrow')
+        let i1 = $('i')
+        let i2 = $('i')
+        i1.classList.add('fas', 'fa-arrow-up')
+        i2.classList.add('fas', 'fa-arrow-down')
         let option = $('option')
         th.textContent = key
         option.textContent = key
         _('select').appendChild(defaultOption)
         _('select').appendChild(option)
+        sortArrow.appendChild(i1)
+        sortArrow.appendChild(i2)
+        th.appendChild(sortArrow)
         tr.appendChild(th)
         table.appendChild(tr)
     })
     localdata.forEach((person) => {
-
         let tr1 = $('tr')
         let deleteBtn = $('i')
         let updateBtn = $('i')
@@ -74,6 +82,10 @@ const addDataAttrToCity = () => {
     trData.forEach(tr => {
         tr.childNodes[5].setAttribute('data-city', tr.childNodes[5].textContent)
         tr.childNodes[5].classList.add('city')
+        let div = $('div')
+        div.classList.add('city-active', 'unvisable')
+
+        tr.childNodes[5].appendChild(div)
     })
 }
 
@@ -139,127 +151,149 @@ const saveDataWithChange = e => {
 }
 let msgParag = $('p')
 msgParag.classList.add('msg-paragraph')
-inputSearch.insertAdjacentElement('beforebegin', msgParag)
+search.insertAdjacentElement('afterend', msgParag)
 const handleSearchInput = e => {
-        let len = container.lastElementChild.childNodes.length
-        let trData = [...container.lastElementChild.childNodes].slice(1, len)
-        let input = inputSearch.value.trim()
-        if (input.length > 0 && searchBy.value !== 'choose filter') {
-            if (searchBy.value === 'id' || searchBy.value === 'capsule' || searchBy.value === 'age') {
-                input = parseInt(input)
-                    // most bt integer num between data length
-                if (typeof input !== 'number' || isNaN(input)) {
-                    msgParag.textContent = 'type some number...'
-                } else {
-                    if (searchBy.value === 'id') {
-                        msgParag.textContent = ''
-                        if (input > 31 || input < 0) {
-                            msgParag.textContent = 'id number should be between 0 to 31'
-                        } else {
-                            trData.forEach(tr => {
-                                let id = parseInt(tr.firstElementChild.firstElementChild.textContent)
-                                if (!id.toString().includes(input.toString())) {
-                                    tr.classList.add('unvisable')
-                                }
-                            })
-                        }
-                    }
-                    if (searchBy.value === 'capsule') {
-                        if (input > 7 || input < 1) {
-                            msgParag.textContent = 'capsule number should be between 1 to 7'
-                        } else {
-                            msgParag.textContent = ''
-                            trData.forEach(tr => {
-                                let capsule = parseInt(tr.childNodes[3].textContent)
-                                if (!capsule.toString().includes(input.toString())) {
-                                    tr.classList.add('unvisable')
-                                }
-                            })
-                        }
-                    }
-                    if (searchBy.value === 'age') {
-                        if (input < 1 || input > 100) {
-                            msgParag.textContent = 'all bootcamper age is between 1 to 100'
-                        } else {
-                            msgParag.textContent = ''
-                            trData.forEach(tr => {
-                                let age = parseInt(tr.childNodes[4].textContent)
-                                if (!age.toString().includes(input.toString())) {
-                                    tr.classList.add('unvisable')
-                                }
-                            })
-                        }
+    let len = container.lastElementChild.childNodes.length
+    let trData = [...container.lastElementChild.childNodes].slice(1, len)
+    let input = inputSearch.value.trim()
+    if (input.length > 0 && searchBy.value !== 'choose filter') {
+        if (searchBy.value === 'id' || searchBy.value === 'capsule' || searchBy.value === 'age') {
+            input = parseInt(input)
+                // most bt integer num between data length
+            if (typeof input !== 'number' || isNaN(input)) {
+                msgParag.textContent = 'type some number...'
+            } else {
+                if (searchBy.value === 'id') {
+                    msgParag.textContent = ''
+                    if (input > 31 || input < 0) {
+                        msgParag.textContent = 'id number should be between 0 to 31'
+                    } else {
+                        trData.forEach(tr => {
+                            let id = parseInt(tr.firstElementChild.firstElementChild.textContent)
+                            if (!id.toString().includes(input.toString())) {
+                                tr.classList.add('unvisable')
+                            }
+                        })
                     }
                 }
-            } else if (
-                searchBy.value === 'firstName' ||
-                searchBy.value === 'lastName' ||
-                searchBy.value === 'city' ||
-                searchBy.value === 'gender' ||
-                searchBy.value === 'hobby'
-            ) {
-                input = input.toString().toLowerCase()
-                if (input.length == 0) {
-                    msgParag.textContent = 'type some words...';
-                } else {
-                    msgParag.textContent = '';
-                    trData.forEach(tr => {
-                        const checkData = (x, y, i) => {
-                            if (x === y) {
-                                if (!tr.childNodes[i].firstElementChild.innerHTML.toLowerCase().includes(input)) {
-                                    tr.classList.add('unvisable')
-                                }
+                if (searchBy.value === 'capsule') {
+                    if (input > 7 || input < 1) {
+                        msgParag.textContent = 'capsule number should be between 1 to 7'
+                    } else {
+                        msgParag.textContent = ''
+                        trData.forEach(tr => {
+                            let capsule = parseInt(tr.childNodes[3].textContent)
+                            if (!capsule.toString().includes(input.toString())) {
+                                tr.classList.add('unvisable')
                             }
-                        }
-                        checkData(searchBy.value, 'firstName', 1)
-                        checkData(searchBy.value, 'lastName', 2)
-                        checkData(searchBy.value, 'city', 5)
-                        checkData(searchBy.value, 'gender', 6)
-                        checkData(searchBy.value, 'hobby', 7)
-                    })
+                        })
+                    }
+                }
+                if (searchBy.value === 'age') {
+                    if (input < 1 || input > 100) {
+                        msgParag.textContent = 'all bootcamper age is between 1 to 100'
+                    } else {
+                        msgParag.textContent = ''
+                        trData.forEach(tr => {
+                            let age = parseInt(tr.childNodes[4].textContent)
+                            if (!age.toString().includes(input.toString())) {
+                                tr.classList.add('unvisable')
+                            }
+                        })
+                    }
                 }
             }
-        }
-        if ((e.key === 'Backspace' || input.length < 1)) {
-            trData.forEach(tr => {
-                tr.classList.remove('unvisable')
-            })
+        } else if (
+            searchBy.value === 'firstName' ||
+            searchBy.value === 'lastName' ||
+            searchBy.value === 'city' ||
+            searchBy.value === 'gender' ||
+            searchBy.value === 'hobby'
+        ) {
+            input = input.toString().toLowerCase()
+            if (input.length == 0) {
+                msgParag.textContent = 'type some words...';
+            } else {
+                msgParag.textContent = '';
+                trData.forEach(tr => {
+                    const checkData = (x, y, i) => {
+                        if (x === y) {
+                            if (!tr.childNodes[i].firstElementChild.innerHTML.toLowerCase().includes(input)) {
+                                tr.classList.add('unvisable')
+                            }
+                        }
+                    }
+                    checkData(searchBy.value, 'firstName', 1)
+                    checkData(searchBy.value, 'lastName', 2)
+                    checkData(searchBy.value, 'city', 5)
+                    checkData(searchBy.value, 'gender', 6)
+                    checkData(searchBy.value, 'hobby', 7)
+                })
+            }
         }
     }
-    // add classlist to city
+    if ((e.key === 'Backspace' || input.length < 1)) {
+        trData.forEach(tr => {
+            tr.classList.remove('unvisable')
+        })
+    }
+}
 
 search.addEventListener('keyup', e => handleSearchInput(e))
 search.addEventListener('click', handleSearchInput)
 
-
 const weatherCityHover = e => {
     let val = e.target.textContent
-    val = val.toLowerCase().split(' ').join('-')
     let apiKey = `880e6c92a48f9475528cfdf79d5d4f00`
-    let api = `http://api.openweathermap.org/data/2.5/weather?q=${val},israel&appid=${apiKey}&units=metric`
-    fetch(api)
-        .then(res => res.json())
-        .then(data => {
-            if (data.main.temp) {
-                let div = $('div')
-                div.classList.add('city-active')
-                e.target.appendChild(div)
-                console.log(data.main.temp);
-                if (e.target.classList.contains('city')) {
-                    div.textContent = data.main.temp
+    let api = `http://api.openweathermap.org/data/2.5/weather?q=${val}&appid=${apiKey}&units=metric`
+    if (e.target.getAttribute('data-city')) {
+        fetch(api)
+            .then(res => {
+                if (!res.ok) {
+                    console.clear()
+                    e.target.lastElementChild.classList.remove('unvisable')
+                    e.target.lastElementChild.textContent = 'Not Found'
+                    throw Error(`OMG its ${res.status}`)
                 }
-            }
-        })
-        .catch(error => console.error(error))
+                return res.json()
+                    .then(data => {
+                        if (data.main.temp) {
+                            if (e.target.classList.contains('city')) {
+                                e.target.lastElementChild.innerHTML = `${data.main.temp} &#8451;`
+                                e.target.lastElementChild.classList.remove('unvisable')
+                            } else {
+                                e.target.lastElementChild.classList.remove('city-active')
+                                e.target.lastElementChild.classList.add('unvisable')
+                            }
+                        }
+                    })
+            }).catch(err => console.warn(err))
+    }
 }
-
-const handleWeatherCityHover = () => {
-    let dataCity = document.querySelectorAll('[data-city]')
-    dataCity.forEach(city => {
-        city.addEventListener('mouseover', weatherCityHover)
-    })
+const sortTable = e => {
+    let len = container.lastElementChild.childNodes.length
+    let trData = [...container.lastElementChild.childNodes].slice(1, len)
+        //     // console.log(trData[4].childNodes[0].textContent);
+        // const sortFunc = (data, place, table) => {
+        //     if (e.target.classList.contains('fa-arrow-down')) {
+        //         data.forEach((tr, i) => {
+        //             [tr.childNodes[place]]
+        //             .sort((a, b) => a.childNodes[place].textContent > b.childNodes[place].textContent ? 1 : -1)
+        //                 .forEach(tr => table.lastElementChild.appendChild(tr, data[i]))
+        //         });
+        //         // else if (e.target.classList.contains('fa-arrow-up')) {
+        //         //     data = data.forEach(tr => {
+        //         //         [tr].sort((a, b) => {
+        //         //             a.childNodes[place].innerHTML > b.childNodes[place].innerHTML ? 1 : -1
+        //         //         }).forEach(node => table.lastElementChild.appendChild(node))
+        //         //     })
+        //         // }
+        //     }
+        // }
+        // sortFunc(trData, 0, container)
+        // sortFunc(trData, 1, container)
 }
-handleWeatherCityHover()
+container.addEventListener('mouseover', weatherCityHover)
 
 container.addEventListener('click', e => {
     e.target.classList.contains('fa-user-edit') ?
@@ -269,6 +303,7 @@ container.addEventListener('click', e => {
         e.target.classList.contains('fa-trash-alt') ?
         handleDeleteBtn(e) :
         e.target.classList.contains('fa-check') ?
-        saveDataWithChange(e) : null
-
+        saveDataWithChange(e) :
+        e.target.parentElement.classList.contains('sort-arrow') ?
+        sortTable(e) : null
 })
