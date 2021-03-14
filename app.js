@@ -48,7 +48,7 @@ const createDetails = () => {
         _('select').appendChild(option)
         sortArrow.appendChild(i1)
         sortArrow.appendChild(i2)
-        th.appendChild(sortArrow)
+            // th.appendChild(sortArrow)
         tr.appendChild(th)
         table.appendChild(tr)
     })
@@ -243,58 +243,54 @@ search.addEventListener('keyup', e => handleSearchInput(e))
 search.addEventListener('click', handleSearchInput)
 
 const weatherCityHover = e => {
-    let val = e.target.textContent
-    let apiKey = `880e6c92a48f9475528cfdf79d5d4f00`
-    let api = `http://api.openweathermap.org/data/2.5/weather?q=${val}&appid=${apiKey}&units=metric`
-    if (e.target.getAttribute('data-city')) {
-        fetch(api)
-            .then(res => {
-                if (!res.ok) {
-                    console.clear()
-                    e.target.lastElementChild.classList.remove('unvisable')
-                    e.target.lastElementChild.textContent = 'Not Found'
-                    throw Error(`OMG its ${res.status}`)
-                }
-                return res.json()
-                    .then(data => {
-                        if (data.main.temp) {
-                            if (e.target.classList.contains('city')) {
-                                e.target.lastElementChild.innerHTML = `${data.main.temp} &#8451;`
-                                e.target.lastElementChild.classList.remove('unvisable')
-                            } else {
-                                e.target.lastElementChild.classList.remove('city-active')
-                                e.target.lastElementChild.classList.add('unvisable')
+        let val = e.target.textContent
+        let apiKey = `880e6c92a48f9475528cfdf79d5d4f00`
+        let api = `http://api.openweathermap.org/data/2.5/weather?q=${val}&appid=${apiKey}&units=metric`
+        if (e.target.getAttribute('data-city')) {
+            fetch(api)
+                .then(res => {
+                    if (!res.ok) {
+                        console.clear()
+                        e.target.lastElementChild.classList.remove('unvisable')
+                        e.target.lastElementChild.textContent = 'Not Found'
+                        throw Error(`OMG its ${res.status}`)
+                    }
+                    return res.json()
+                        .then(data => {
+                            if (data.main.temp) {
+                                if (e.target.classList.contains('city')) {
+                                    e.target.lastElementChild.innerHTML = `${data.main.temp} &#8451;`
+                                    e.target.lastElementChild.classList.remove('unvisable')
+                                } else {
+                                    e.target.lastElementChild.classList.remove('city-active')
+                                    e.target.lastElementChild.classList.add('unvisable')
+                                }
                             }
-                        }
-                    })
-            }).catch(err => console.warn(err))
+                        })
+                }).catch(err => console.warn(err))
+        }
     }
-}
-const sortTable = e => {
-    let len = container.lastElementChild.childNodes.length
-    let trData = [...container.lastElementChild.childNodes].slice(1, len)
-        //     // console.log(trData[4].childNodes[0].textContent);
-        // const sortFunc = (data, place, table) => {
-        //     if (e.target.classList.contains('fa-arrow-down')) {
-        //         data.forEach((tr, i) => {
-        //             [tr.childNodes[place]]
-        //             .sort((a, b) => a.childNodes[place].textContent > b.childNodes[place].textContent ? 1 : -1)
-        //                 .forEach(tr => table.lastElementChild.appendChild(tr, data[i]))
-        //         });
-        //         // else if (e.target.classList.contains('fa-arrow-up')) {
-        //         //     data = data.forEach(tr => {
-        //         //         [tr].sort((a, b) => {
-        //         //             a.childNodes[place].innerHTML > b.childNodes[place].innerHTML ? 1 : -1
-        //         //         }).forEach(node => table.lastElementChild.appendChild(node))
-        //         //     })
-        //         // }
-        //     }
-        // }
-        // sortFunc(trData, 0, container)
-        // sortFunc(trData, 1, container)
-}
-container.addEventListener('mouseover', weatherCityHover)
-
+    // const sortTable = e => {
+    //     let searchBy = e.target.parentElement.parentElement.textContent
+    //     console.log(searchBy);
+    //     let len = container.lastElementChild.childNodes.length
+    //     let trData = [...container.lastElementChild.childNodes].splice(1, len)
+    //     console.log(trData[0].children[trData[0].children.length - 2]);
+    //     if (e.target.classList.contains('fa-arrow-down')) {
+    //         let sorting = () => data.sort((a, b) => a[searchBy] > b[searchBy] ? 1 : -1)
+    //         const replace = () => trData.forEach((tr, i) => [tr][i].forEach((td, j) => td[j].textContent = data[i][j]))
+    //         sorting()
+    //         replace()
+    //         saveToLocalStrorge()
+    //     } else if (e.target.classList.contains('fa-arrow-up')) {
+    //         let sorting = () => data.sort((a, b) => b[searchBy] > a[searchBy] ? 1 : -1)
+    //         const replace = () => trData.forEach((tr, i) => [tr][i].forEach((td, j) => td[j].textContent = data[i][j]))
+    //         sorting()
+    //         replace()
+    //     }
+    //     saveToLocalStrorge()
+    // }
+container.addEventListener('mouseover', weatherCityHover);
 container.addEventListener('click', e => {
     e.target.classList.contains('fa-user-edit') ?
         handleEditBtn(e) :
@@ -303,7 +299,9 @@ container.addEventListener('click', e => {
         e.target.classList.contains('fa-trash-alt') ?
         handleDeleteBtn(e) :
         e.target.classList.contains('fa-check') ?
-        saveDataWithChange(e) :
-        e.target.parentElement.classList.contains('sort-arrow') ?
-        sortTable(e) : null
+        saveDataWithChange(e)
+        // e.target.parentElement.classList.contains('sort-arrow') ?
+        // sortTable(e) 
+        :
+        null
 })
