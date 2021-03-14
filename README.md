@@ -1,1 +1,1 @@
-# live demo <a href="https://gurelbs.github.io/capsulesAPI/">HERE</a>
+# live demo <a href="https://gurelbs.github.io/capsulesAPI/">HERE</a> or <a href="https://capsules.cf">HERE</a>
