@@ -244,7 +244,7 @@ search.addEventListener('click', handleSearchInput)
 const weatherCityHover = e => {
         let val = e.target.textContent
         let apiKey = `880e6c92a48f9475528cfdf79d5d4f00`
-        let api = `http://api.openweathermap.org/data/2.5/weather?q=${val}&appid=${apiKey}&units=metric`
+        let api = `https://api.openweathermap.org/data/2.5/weather?q=${val}&appid=${apiKey}&units=metric`
         if (e.target.getAttribute('data-city')) {
             fetch(api)
                 .then(res => {
