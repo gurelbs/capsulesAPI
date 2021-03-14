@@ -11,18 +11,20 @@ let searchBy = _('#search-by')
 // let data = JSON.parse(localStorage.getItem('data'))
 let data = []
 const saveToLocalStrorge = () => localStorage.setItem('data', JSON.stringify(data))
-fetch(api)
-    .then(res => res.json())
-    .then(students => {
-        students.forEach((student, i) => {
-            fetch(`${api}${i}`)
-                .then(res => res.json())
-                .then(studentData => {
-                    data.push({...student, ...studentData })
-                    saveToLocalStrorge()
-                })
-        });
-    })
+const fetchApi = () => {
+    fetch(api)
+        .then(res => res.json())
+        .then(students => {
+            students.forEach((student, i) => {
+                fetch(`${api}${i}`)
+                    .then(res => res.json())
+                    .then(studentData => {
+                        data.push({...student, ...studentData })
+                        saveToLocalStrorge()
+                    })
+            });
+        })
+}
 
 const createDetails = () => {
     let table = $('table')
@@ -73,7 +75,6 @@ const createDetails = () => {
         tr1.appendChild(div)
         table.appendChild(tr1)
     });
-
     container.appendChild(table)
 }
 const addDataAttrToCity = () => {
@@ -88,10 +89,6 @@ const addDataAttrToCity = () => {
         tr.childNodes[5].appendChild(div)
     })
 }
-
-createDetails()
-addDataAttrToCity()
-
 
 const handleEditBtn = e => {
     let el = e.target.parentElement.parentElement
@@ -305,3 +302,7 @@ container.addEventListener('click', e => {
         :
         null
 })
+
+fetchApi()
+createDetails()
+addDataAttrToCity()
