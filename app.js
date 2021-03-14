@@ -254,7 +254,7 @@ const weatherCityHover = e => {
                         e.target.lastElementChild.textContent = 'Not Found'
                         throw Error(`OMG its ${res.status}`)
                     }
-                    return res.json()
+                    res.json()
                         .then(data => {
                             if (data.main.temp) {
                                 if (e.target.classList.contains('city')) {
